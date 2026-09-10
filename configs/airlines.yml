@@ -1,0 +1,22 @@
+version: prototype-2026-09-07
+status: DEMO_PROTOTYPE_ASSUMPTION
+# Major Indian domestic airlines for prototype collection.
+# NOT an exhaustive DGCA register. Replace with approved reference data.
+airlines:
+  - code: 6E
+    name: IndiGo
+  - code: AI
+    name: Air India
+  - code: SG
+    name: SpiceJet
+  - code: QP
+    name: Akasa Air
+  - code: UK
+    name: Vistara
+  - code: IX
+    name: Air India Express
+  - code: I5
+    name: AirAsia India
+  - code: G8
+    name: Go First
+    active: false

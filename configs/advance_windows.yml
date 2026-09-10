@@ -1,0 +1,8 @@
+version: prototype-2026-09-07
+status: DEMO_PROTOTYPE_ASSUMPTION
+advance_purchase_days:
+  - 1
+  - 7
+  - 15
+  - 30
+  - 45

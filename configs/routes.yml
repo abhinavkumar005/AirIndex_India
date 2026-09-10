@@ -1,0 +1,34 @@
+version: prototype-2026-09-07
+status: DEMO_PROTOTYPE_ASSUMPTION
+description: Illustrative routes and equal weights; replace with approved PSD/DGCA inputs.
+routes:
+  - code: DEL-BOM
+    origin: DEL
+    destination: BOM
+    weight: 0.1666666667
+    effective_from: 2026-09-07
+  - code: DEL-BLR
+    origin: DEL
+    destination: BLR
+    weight: 0.1666666667
+    effective_from: 2026-09-07
+  - code: BOM-BLR
+    origin: BOM
+    destination: BLR
+    weight: 0.1666666667
+    effective_from: 2026-09-07
+  - code: DEL-CCU
+    origin: DEL
+    destination: CCU
+    weight: 0.1666666667
+    effective_from: 2026-09-07
+  - code: BLR-HYD
+    origin: BLR
+    destination: HYD
+    weight: 0.1666666666
+    effective_from: 2026-09-07
+  - code: MAA-DEL
+    origin: MAA
+    destination: DEL
+    weight: 0.1666666666
+    effective_from: 2026-09-07

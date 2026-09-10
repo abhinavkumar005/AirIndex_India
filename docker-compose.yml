@@ -1,0 +1,4 @@
+# Phase 0 placeholder.
+# Runnable services will be added only when their Dockerfiles and health checks exist.
+name: airindex-india
+services: {}

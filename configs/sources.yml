@@ -1,0 +1,32 @@
+version: prototype-2026-09-07
+default_enabled: false
+sources:
+  - code: MOCK_AIRLINE
+    type: MOCK
+    enabled: true
+    compliance_status: APPROVED_FOR_SYNTHETIC_DEVELOPMENT
+    rate_limit_per_minute: 60
+  - code: INDIGO
+    type: AIRLINE
+    enabled: false
+    compliance_status: UNKNOWN
+  - code: AIR_INDIA
+    type: AIRLINE
+    enabled: false
+    compliance_status: UNKNOWN
+  - code: AIR_INDIA_EXPRESS
+    type: AIRLINE
+    enabled: false
+    compliance_status: UNKNOWN
+  - code: AKASA_AIR
+    type: AIRLINE
+    enabled: false
+    compliance_status: UNKNOWN
+  - code: SPICEJET
+    type: AIRLINE
+    enabled: false
+    compliance_status: UNKNOWN
+  - code: OTA_CANDIDATES
+    type: OTA
+    enabled: false
+    compliance_status: REQUIRES_INDIVIDUAL_SOURCE_RECORDS

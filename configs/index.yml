@@ -1,0 +1,13 @@
+version: prototype-2026-09-07
+status: DEMO_PROTOTYPE_ASSUMPTION
+currency: INR
+representative_fare_statistic: median
+base_period: null
+frequencies:
+  - daily
+  - weekly
+  - monthly
+minimum_cell_observations: 1
+outlier_policy: flag_only
+missing_cell_policy: unresolved_requires_approval
+weight_redistribution_policy: unresolved_requires_approval

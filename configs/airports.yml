@@ -1,0 +1,53 @@
+version: prototype-2026-09-07
+status: DEMO_PROTOTYPE_ASSUMPTION
+# Curated list of major Indian airports appearing in prototype routes.
+# NOT an exhaustive DGCA register. Replace with approved reference data.
+airports:
+  - iata_code: DEL
+    name: Indira Gandhi International Airport
+    city_code: DEL
+    city_name: Delhi
+  - iata_code: BOM
+    name: Chhatrapati Shivaji Maharaj International Airport
+    city_code: BOM
+    city_name: Mumbai
+  - iata_code: BLR
+    name: Kempegowda International Airport
+    city_code: BLR
+    city_name: Bengaluru
+  - iata_code: CCU
+    name: Netaji Subhas Chandra Bose International Airport
+    city_code: CCU
+    city_name: Kolkata
+  - iata_code: HYD
+    name: Rajiv Gandhi International Airport
+    city_code: HYD
+    city_name: Hyderabad
+  - iata_code: MAA
+    name: Chennai International Airport
+    city_code: MAA
+    city_name: Chennai
+  - iata_code: GOI
+    name: Goa International Airport (Dabolim)
+    city_code: GOI
+    city_name: Goa
+  - iata_code: COK
+    name: Cochin International Airport
+    city_code: COK
+    city_name: Kochi
+  - iata_code: PNQ
+    name: Pune Airport
+    city_code: PNQ
+    city_name: Pune
+  - iata_code: JAI
+    name: Jaipur International Airport
+    city_code: JAI
+    city_name: Jaipur
+  - iata_code: AMD
+    name: Sardar Vallabhbhai Patel International Airport
+    city_code: AMD
+    city_name: Ahmedabad
+  - iata_code: GAU
+    name: Lokpriya Gopinath Bordoloi International Airport
+    city_code: GAU
+    city_name: Guwahati

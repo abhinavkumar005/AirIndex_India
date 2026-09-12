@@ -2,11 +2,11 @@
 
 - [x] Phase 0 — Repository initialization, architecture, documentation, configuration skeleton
 - [x] Phase 1 — Domain models and validated configuration loaders
-- [ ] Phase 2 — PostgreSQL schema and Alembic migrations
-- [ ] Phase 3 — Realistic, deterministic mock airfare provider
-- [ ] Phase 4 — Validation, cleaning, normalization, deduplication, outliers, quality scoring
-- [ ] Phase 5 — Representative fares and configurable daily/weekly/monthly index engine
-- [ ] Phase 6 — FastAPI services and `/api/v1` endpoints
+- [x] Phase 2 — PostgreSQL schema and Alembic migrations
+- [x] Phase 3 — Realistic, deterministic mock airfare provider
+- [x] Phase 4 — Validation, cleaning, normalization, deduplication, outliers, quality scoring
+- [x] Phase 5 — Representative fares and configurable daily/weekly/monthly index engine
+- [x] Phase 6 — FastAPI services and `/api/v1` endpoints
 - [ ] Phase 7 — React government/statistical dashboard
 - [ ] Phase 8 — Source adapter framework and mock connector integration
 - [ ] Phase 9 — Celery/Redis scheduling and worker orchestration

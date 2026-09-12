@@ -48,4 +48,4 @@ Structured events, health checks, rate limiting, safe error responses, authentic
 
 ## Current State
 
-Phase 1 is complete. The typed domain layer (enums, Pydantic v2 models, and validated YAML configuration loaders) is implemented under `backend/app/core/` and `backend/app/schemas/`. No runtime services, database schema, or API endpoints exist yet. 88 unit tests are passing.
+Phases 1–6 are complete. The typed domain layer (enums, Pydantic v2 models, validated YAML configuration loaders), the PostgreSQL ORM schema with Alembic migrations, the deterministic mock fare generator, the validation→cleaning→deduplication→outlier→quality pipeline, and the configurable index engine are implemented under `backend/app/`. The FastAPI application (`backend/app/main.py`) serves all 11 planned `/api/v1` endpoints with a service layer, typed response envelopes, settings-driven CORS, and Swagger/ReDoc docs. Per ADR-007, API responses are computed on-the-fly from the mock provider; persistence wiring, the adapter framework, workers, and the React dashboard are not yet implemented. 187 unit tests are passing.

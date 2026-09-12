@@ -1,0 +1,3 @@
+"""
+AirIndex India services package.
+"""

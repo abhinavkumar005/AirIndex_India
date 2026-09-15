@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-gov-50 text-gov-800 antialiased;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ECharts containers need explicit dimensions */
+.chart-container {
+  @apply w-full;
+  height: 360px;
+}
+
+.chart-container-sm {
+  @apply w-full;
+  height: 260px;
+}

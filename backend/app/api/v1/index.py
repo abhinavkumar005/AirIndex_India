@@ -20,6 +20,7 @@ from app.schemas.responses import (
     ApiEnvelope,
     CurrentIndexResponse,
     IndexValueResponse,
+    LeadTimeElasticityResponse,
 )
 from app.services.index_service import IndexService
 
@@ -39,6 +40,27 @@ _service = IndexService()
 def get_current_index():
     """Get the latest daily APIx value with 7-day and 30-day trends."""
     data = _service.get_current_index()
+    return ApiEnvelope(data=data)
+
+
+@router.get(
+    "/lead-time",
+    response_model=ApiEnvelope[LeadTimeElasticityResponse],
+    summary="Lead-time elasticity cells",
+    description="Returns representative fares per route × advance-purchase "
+                "window (T+1 … T+45) for an observation date, powering the "
+                "lead-time elasticity dashboard view.",
+)
+def get_lead_time_elasticity(
+    observation_date: date = Query(
+        default=None,
+        description="Observation date. Defaults to today.",
+    ),
+):
+    """Get representative fare per route × advance-window cell."""
+    if observation_date is None:
+        observation_date = date.today()
+    data = _service.get_lead_time_elasticity(observation_date)
     return ApiEnvelope(data=data)
 
 

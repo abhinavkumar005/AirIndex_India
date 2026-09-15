@@ -22,6 +22,8 @@ from typing import Any
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
+from typing import Optional
+
 # ---------------------------------------------------------------------------
 # Naming conventions — keeps constraint names consistent and predictable
 # across all tables, which is critical for Alembic migrations.
@@ -83,8 +85,19 @@ def get_session_factory(engine=None) -> sessionmaker[Session]:
     return sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
-# Convenience alias — typically overridden in app startup.
-SessionLocal: sessionmaker[Session] = None  # type: ignore[assignment]
+# Convenience alias — initialized via init_db() at app startup.
+SessionLocal: Optional[sessionmaker[Session]] = None
+
+
+def init_db(url: str | None = None) -> sessionmaker[Session]:
+    """Initialize the module-level session factory.
+
+    Safe to call multiple times (e.g. in tests); each call rebinds
+    SessionLocal to a new factory bound to the given URL.
+    """
+    global SessionLocal
+    SessionLocal = get_session_factory(get_engine(url))
+    return SessionLocal
 
 
 def get_db() -> Generator[Session, None, None]:

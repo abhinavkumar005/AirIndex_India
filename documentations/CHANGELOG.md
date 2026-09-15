@@ -1,5 +1,47 @@
 # Changelog
 
+## Phase 7 — React Government Dashboard + Database Corrections (2026-09-12)
+
+### Added
+
+- **Frontend (Vite + React 18 + TypeScript + Tailwind CSS + ECharts):**
+  - `frontend/package.json`, `vite.config.ts` (with `/api` dev proxy to `:8000`), `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `index.html`.
+  - `frontend/src/types/api.ts` — TypeScript types mirroring `backend/app/schemas/responses.py`.
+  - `frontend/src/api/client.ts` — typed API client with error envelope handling and pagination-aware fares fetch.
+  - `frontend/src/components/EChart.tsx` — ECharts lifecycle wrapper; `ui.tsx` — StatTile/Card/PageHeader/ErrorBanner/Loading primitives.
+  - `frontend/src/App.tsx`, `main.tsx`, `index.css` — router, layout, navigation, government-navy theme.
+  - Five dashboard views per the implementation plan:
+    - `pages/Dashboard.tsx` — APIx overview: current value, 7d/30d trends, daily/weekly/monthly series, coverage, provenance tiles.
+    - `pages/RouteExplorer.tsx` — route × day price-relative heatmap, route selector, representative-fare drill-down.
+    - `pages/LeadTimeElasticity.tsx` — per-route T+1…T+45 representative-fare curves and T+1 premium bars (new endpoint below).
+    - `pages/DataQuality.tsx` — disposition pie, per-route coverage bars, source health/compliance table.
+    - `pages/Validation.tsx` — backtest summary tiles and daily series with mean/min/max marklines, selectable 7–60 day window.
+- **Backend lead-time elasticity support** (closes the KNOWN_ISSUES gap that the engine collapsed the advance-purchase dimension):
+  - `backend/app/index_engine/engine.py` — `compute_lead_time_cells()` + `LeadTimeCellResult`: representative fare per route × advance-window cell (composite index methodology unchanged).
+  - `backend/app/schemas/responses.py` — `LeadTimeCellResponse`, `LeadTimeElasticityResponse`.
+  - `backend/app/services/index_service.py` — `get_lead_time_elasticity()`.
+  - `backend/app/api/v1/index.py` — `GET /api/v1/index/lead-time`.
+  - `tests/unit/test_api.py` — 2 new tests (shape + window coverage, explicit-date determinism), including T+1 > 1.25 × T+45 sanity.
+- **Database seed layer** (Phase 2 plan deliverable that had not landed):
+  - `database/seed/airports.json` — 12 curated Indian airports with city mappings.
+  - `database/seed/airlines.json` — IndiGo, Air India, Air India Express, Akasa Air, SpiceJet.
+  - `database/seed/seed_loader.py` — idempotent loader for cities, airports, airlines, MOCK source, routes, and route weights (from `configs/routes.yml`).
+
+### Changed
+
+- `backend/app/core/database.py` — `SessionLocal` is now a properly typed `Optional[sessionmaker]` with an `init_db()` initializer instead of a `None` with `# type: ignore`; added missing `Optional` import.
+- `backend/app/models/evidence.py` — removed unused `JSONB`/`Text` imports; UUID import preserved.
+
+### Verification
+
+- Backend: 189 tests passing (187 prior + 2 new lead-time tests).
+- Frontend: `tsc -b && vite build` clean; dev server verified with all 10 API endpoints proxied (200s).
+- Alembic: `alembic upgrade head --sql` offline DDL generation verified.
+
+### Tests
+
+- **189 total backend tests passing.**
+
 ## Phase 6 — FastAPI Services and REST API (2026-09-12)
 
 ### Added

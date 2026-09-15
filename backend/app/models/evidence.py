@@ -12,9 +12,8 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.postgresql import JSONB, UUID as PG_UUID
-from sqlalchemy import JSON
+from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base

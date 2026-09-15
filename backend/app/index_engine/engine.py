@@ -50,6 +50,22 @@ class CellResult:
 
 
 @dataclass
+class LeadTimeCellResult:
+    """Result for a single route × advance-window cell on a date.
+
+    Backs the lead-time elasticity view: representative fare for each
+    advance-purchase window (T+1 … T+45) for a given route and date.
+    """
+    route_code: str
+    observation_date: date
+    advance_days: int
+    observation_count: int
+    excluded_count: int
+    representative_fare: Decimal | None
+    statistic_used: str
+
+
+@dataclass
 class RouteIndexResult:
     """Index result for a single route."""
     route_code: str
@@ -180,6 +196,60 @@ class IndexEngine:
             eligible.append(obs.total_payable_fare)
 
         return eligible, excluded
+
+    def compute_lead_time_cells(
+        self,
+        observation_date: date,
+        observations: list[QualityScoredObservation],
+        route_weights: dict[str, float],
+        advance_days_windows: list[int],
+    ) -> dict[str, list[LeadTimeCellResult]]:
+        """Compute representative fares per route × advance-window cell.
+
+        Groups eligible observations by (route, advance_purchase_days) and
+        computes the configured representative statistic per cell. This is
+        the cell-level output the lead-time elasticity view (Phase 7)
+        consumes; it does not affect the composite index methodology.
+
+        Returns:
+            Dict of route_code → list of cell results ordered by window.
+        """
+        # Group observations by (route, advance_days)
+        cell_obs: dict[tuple[str, int], list[QualityScoredObservation]] = defaultdict(list)
+        for scored in observations:
+            obs = scored.observation
+            route_key = f"{obs.origin_airport}-{obs.destination_airport}"
+            cell_obs[(route_key, obs.advance_purchase_days)].append(scored)
+
+        results: dict[str, list[LeadTimeCellResult]] = defaultdict(list)
+        for route_code in route_weights:
+            for window in sorted(advance_days_windows):
+                group = cell_obs.get((route_code, window), [])
+                eligible_fares, excluded = self._filter_eligible(group)
+
+                if len(eligible_fares) < self.config.minimum_cell_observations:
+                    results[route_code].append(LeadTimeCellResult(
+                        route_code=route_code,
+                        observation_date=observation_date,
+                        advance_days=window,
+                        observation_count=len(group),
+                        excluded_count=excluded,
+                        representative_fare=None,
+                        statistic_used=self.config.representative_fare_statistic,
+                    ))
+                    continue
+
+                rep_fare = self._compute_representative_fare(eligible_fares)
+                results[route_code].append(LeadTimeCellResult(
+                    route_code=route_code,
+                    observation_date=observation_date,
+                    advance_days=window,
+                    observation_count=len(group),
+                    excluded_count=excluded,
+                    representative_fare=rep_fare,
+                    statistic_used=self.config.representative_fare_statistic,
+                ))
+        return dict(results)
 
     def compute_daily(
         self,

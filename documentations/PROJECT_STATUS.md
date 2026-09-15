@@ -1,7 +1,7 @@
 # Project Status
 
-**Current phase:** Phase 6 — FastAPI Services and REST API  
-**Status:** COMPLETE; Phase 7+ awaiting approval  
+**Current phase:** Phase 7 — React Government Dashboard  
+**Status:** COMPLETE; Phase 8+ awaiting approval  
 **Last updated:** 2026-09-12
 
 ## Completed
@@ -54,17 +54,25 @@
   - Pipeline now sets `quality_status` (VALID/FLAGGED) per DATA_DICTIONARY (previously stuck at PENDING).
   - 26 API tests including regression tests for the above fixes.
   - **187 total tests.**
+- **Phase 7: React government/statistical dashboard + database corrections.**
+  - Vite + React 18 + TypeScript + Tailwind CSS + ECharts frontend (`frontend/`).
+  - All 5 dashboard views: APIx Overview, Route Explorer (heatmap + drill-down), Lead-Time Elasticity, Data Quality Monitor, Backtest/Validation.
+  - Typed API client mirroring backend response schemas; dev proxy to FastAPI (`:8000`).
+  - New `GET /api/v1/index/lead-time` endpoint backed by `IndexEngine.compute_lead_time_cells()` — representative fares per route × advance-purchase window (closes the KNOWN_ISSUES lead-time gap without changing composite methodology).
+  - Database corrections: `SessionLocal` typing + `init_db()`; removed unused imports in `evidence.py`.
+  - Database seed layer (previously missing Phase 2 deliverable): `database/seed/airports.json`, `airlines.json`, idempotent `seed_loader.py`.
+  - 2 new API tests (lead-time shape + determinism). **189 total tests.**
 
 ## Current Work
 
-- Phases 3–6 documented; awaiting Phase 7 approval.
+- Phase 7 complete and verified (build + live dev-server smoke test of all endpoints); awaiting Phase 8 approval.
 
 ## Pending
 
-- Phase 7: React government/statistical dashboard.
 - Phase 8: Source adapter framework and mock connector integration.
 - Phase 9–15: Workers, external sources, backtesting, DGCA validation, deployment, demo.
 - Index values are computed on-the-fly from the mock provider per request (see ADR-007); persistent storage of observations and index values in PostgreSQL arrives with Phase 8/9 wiring.
+- Live PostgreSQL on the development machine rejects the default `airindex/change-me` credentials — owner must supply actual credentials to run migrations/seed against it.
 
 ## Blockers / Required Inputs
 
@@ -84,10 +92,10 @@
 | Mock generator | IMPLEMENTED | Deterministic fare generation; 16 tests |
 | Data pipeline | IMPLEMENTED | Validation, cleaning, dedup, outliers, quality; 18 tests |
 | Index engine | IMPLEMENTED | Daily/weekly/monthly with provenance; 12 tests |
-| API | IMPLEMENTED | 11 endpoints, service layer, envelope, Swagger; 27 tests |
-| Frontend | SKELETON | Directories only; no React app yet |
+| API | IMPLEMENTED | 12 endpoints, service layer, envelope, Swagger; 28 tests |
+| Frontend | IMPLEMENTED | Vite + React 18 + TS + Tailwind + ECharts; 5 dashboard views |
 | Collectors | SKELETON | Compliance-first adapter structure only |
-| Testing | ACTIVE | 187 unit tests; 1 e2e integration test |
+| Testing | ACTIVE | 189 unit tests; 1 e2e integration test |
 | Deployment | PLANNED | Compose topology documented; no runtime images yet |
 
 ## Known Bugs
@@ -96,4 +104,4 @@ None; tests are green.
 
 ## Next Recommended Task
 
-With owner approval, implement Phase 7: React government/statistical dashboard (APIx overview, route explorer, lead-time elasticity, data quality, backtest validation views).
+With owner approval, implement Phase 8: source adapter framework (registry, rate limiter, compliance gate) and mock connector integration into the pipeline, plus persistence wiring so observations and index values land in PostgreSQL.

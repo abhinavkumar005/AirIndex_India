@@ -131,6 +131,33 @@ class CurrentIndexResponse(BaseModel):
     trend_30d: Optional[Decimal] = None
 
 
+class LeadTimeCellResponse(BaseModel):
+    """A single route × advance-window cell for lead-time analysis."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    route_code: str
+    observation_date: date
+    advance_days: int
+    observation_count: int
+    excluded_count: int
+    representative_fare: Optional[Decimal] = None
+    statistic_used: str
+
+
+class LeadTimeElasticityResponse(BaseModel):
+    """Lead-time elasticity curves: representative fare by advance window."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    observation_date: date
+    advance_windows: list[int]
+    routes: list[LeadTimeCellResponse] = Field(
+        default_factory=list,
+        description="Flat list of route × window cells; group client-side by route_code",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Route responses
 # ---------------------------------------------------------------------------

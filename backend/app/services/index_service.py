@@ -20,6 +20,8 @@ from app.index_engine.engine import EngineConfig, IndexEngine, IndexResult
 from app.schemas.responses import (
     CurrentIndexResponse,
     IndexValueResponse,
+    LeadTimeCellResponse,
+    LeadTimeElasticityResponse,
     RouteComponentResponse,
     RouteTrendPoint,
     RouteTrendResponse,
@@ -121,6 +123,51 @@ class IndexService:
             results.append(result)
             current += timedelta(days=1)
         return results
+
+    def get_lead_time_elasticity(
+        self,
+        observation_date: date,
+    ) -> LeadTimeElasticityResponse:
+        """Get representative fares per route × advance-purchase window.
+
+        Powers the lead-time elasticity view: one representative fare per
+        (route, T+N window) cell for the given observation date.
+        """
+        routes, airlines, advance_days, route_weights = self._get_routes_and_config()
+
+        observations = self.generator.generate_day(
+            observation_date=observation_date,
+            routes=routes,
+            airlines=airlines,
+            advance_days=advance_days,
+        )
+        pipeline_result = self.pipeline.process(observations)
+
+        cell_map = self.engine.compute_lead_time_cells(
+            observation_date=observation_date,
+            observations=pipeline_result.valid,
+            route_weights=route_weights,
+            advance_days_windows=advance_days,
+        )
+
+        cells: list[LeadTimeCellResponse] = []
+        for route_code in route_weights:
+            for cell in cell_map.get(route_code, []):
+                cells.append(LeadTimeCellResponse(
+                    route_code=cell.route_code,
+                    observation_date=cell.observation_date,
+                    advance_days=cell.advance_days,
+                    observation_count=cell.observation_count,
+                    excluded_count=cell.excluded_count,
+                    representative_fare=cell.representative_fare,
+                    statistic_used=cell.statistic_used,
+                ))
+
+        return LeadTimeElasticityResponse(
+            observation_date=observation_date,
+            advance_windows=sorted(advance_days),
+            routes=cells,
+        )
 
     def get_current_index(self) -> CurrentIndexResponse:
         """Get the latest daily index value with trend indicators.

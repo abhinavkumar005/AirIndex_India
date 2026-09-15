@@ -65,6 +65,49 @@ class TestIndexEndpoints:
         assert "route_count" in data
         assert data["frequency"] == "daily"
 
+    def test_get_lead_time_elasticity(self, client: TestClient):
+        response = client.get("/api/v1/index/lead-time")
+        assert response.status_code == 200
+        envelope = response.json()
+        data = envelope["data"]
+        # Windows from advance_windows.yml: T+1, T+7, T+15, T+30, T+45
+        assert data["advance_windows"] == [1, 7, 15, 30, 45]
+        # 6 routes × 5 windows = 30 cells
+        assert len(data["routes"]) == 30
+        # Each cell has the expected shape
+        for cell in data["routes"]:
+            assert set(cell.keys()) >= {
+                "route_code", "observation_date", "advance_days",
+                "observation_count", "excluded_count",
+                "representative_fare", "statistic_used",
+            }
+        # At least some cells should have representative fares (available flights)
+        with_fares = [c for c in data["routes"] if c["representative_fare"] is not None]
+        assert len(with_fares) > 0
+        # Lead-time monotonicity sanity: T+1 fare >= T+45 fare for routes
+        # where both cells have fares (mock uses advance-purchase curves)
+        by_route: dict[str, dict[int, float]] = {}
+        for cell in with_fares:
+            by_route.setdefault(cell["route_code"], {})[cell["advance_days"]] = float(cell["representative_fare"])
+        monotone_routes = 0
+        for route, fares in by_route.items():
+            if 1 in fares and 45 in fares:
+                monotone_routes += 1
+                # Allow noise; the T+1 premium should be substantial (≥25%)
+                assert fares[1] > fares[45] * 1.25, (
+                    f"{route}: T+1 fare {fares[1]} not > 1.25× T+45 fare {fares[45]}"
+                )
+        assert monotone_routes > 0
+
+    def test_get_lead_time_elasticity_explicit_date(self, client: TestClient):
+        response = client.get(
+            "/api/v1/index/lead-time",
+            params={"observation_date": "2026-09-01"},
+        )
+        assert response.status_code == 200
+        data = response.json()["data"]
+        assert data["observation_date"] == "2026-09-01"
+
     def test_get_daily_index(self, client: TestClient):
         today = date.today()
         start = today - timedelta(days=2)

@@ -1,0 +1,74 @@
+[
+  {
+    "iata_code": "DEL",
+    "name": "Delhi Indira Gandhi International Airport",
+    "city_code": "DEL",
+    "city_name": "Delhi"
+  },
+  {
+    "iata_code": "BOM",
+    "name": "Mumbai Chhatrapati Shivaji Maharaj International Airport",
+    "city_code": "BOM",
+    "city_name": "Mumbai"
+  },
+  {
+    "iata_code": "BLR",
+    "name": "Bengaluru Kempegowda International Airport",
+    "city_code": "BLR",
+    "city_name": "Bengaluru"
+  },
+  {
+    "iata_code": "HYD",
+    "name": "Hyderabad Rajiv Gandhi International Airport",
+    "city_code": "HYD",
+    "city_name": "Hyderabad"
+  },
+  {
+    "iata_code": "MAA",
+    "name": "Chennai International Airport",
+    "city_code": "MAA",
+    "city_name": "Chennai"
+  },
+  {
+    "iata_code": "CCU",
+    "name": "Kolkata Netaji Subhas Chandra Bose International Airport",
+    "city_code": "CCU",
+    "city_name": "Kolkata"
+  },
+  {
+    "iata_code": "GOI",
+    "name": "Goa Dabolim Airport",
+    "city_code": "GOI",
+    "city_name": "Goa"
+  },
+  {
+    "iata_code": "AMD",
+    "name": "Ahmedabad Sardar Vallabhbhai Patel International Airport",
+    "city_code": "AMD",
+    "city_name": "Ahmedabad"
+  },
+  {
+    "iata_code": "PNQ",
+    "name": "Pune Airport",
+    "city_code": "PNQ",
+    "city_name": "Pune"
+  },
+  {
+    "iata_code": "JAI",
+    "name": "Jaipur International Airport",
+    "city_code": "JAI",
+    "city_name": "Jaipur"
+  },
+  {
+    "iata_code": "COK",
+    "name": "Kochi Cochin International Airport",
+    "city_code": "COK",
+    "city_name": "Kochi"
+  },
+  {
+    "iata_code": "GAU",
+    "name": "Guwahati Lokpriya Gopinath Bordoloi International Airport",
+    "city_code": "GAU",
+    "city_name": "Guwahati"
+  }
+]
